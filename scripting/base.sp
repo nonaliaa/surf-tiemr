@@ -75,7 +75,8 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_menu", Command_menu, "displays a settings menu");
 }
 
-public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast) {
+public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast) 
+{
 	for (int i = 1; i < MaxClients + 1; i++) {
 		switch (toggle_godmode[i]) {
 			case true:
@@ -138,7 +139,8 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &inpulse, float[3] ve
 }
 
 
-public Action Command_God(int client, int args) {
+public Action Command_God(int client, int args) 
+{
 	toggle_godmode[client] = !toggle_godmode[client];
 	PrintToChat(client, "godmode %s", toggle_godmode[client] ? "enabled":"disabled");
 	
@@ -226,14 +228,16 @@ public Action timer_getvel(Handle timer)
 }
 
 
-public Action Command_menu(int client, int args) {
+public Action Command_menu(int client, int args) 
+{
 	g_menu.Display(client, MENU_TIME_FOREVER);
 	
 	return Plugin_Handled;
 }
 
 // handler for menu "g_menu", this is where the code for it items is stored.
-public int Command_menu_handler(Menu menu, MenuAction action, int param1, int param2) {
+public int Command_menu_handler(Menu menu, MenuAction action, int param1, int param2) 
+{
 	switch (action) {
 		case MenuAction_Select:
 		{

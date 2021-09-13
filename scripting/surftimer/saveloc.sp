@@ -62,7 +62,8 @@ public Action Command_tele(int client, int args)
 		PrintToChat(client, "there are no savelocs to tele to. sm_saveloc to create one!");
 		return Plugin_Handled;
 	}
-	else {
+	else 
+	{
 		if (args < 1)
 		{
 			TeleportEntity(client, g_fOrigin_library[g_irelevant_saveloc[client]], g_fEyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
