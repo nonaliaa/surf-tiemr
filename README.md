@@ -3,4 +3,4 @@ Work in progress surf timer, Built from scratch with inspiration from ksf's time
 don't be afraid to suggest features if you feel like the timer would be better with it!! 
 
 rough roadmap, subject to change:
-![ROADMAP](https://i.imgur.com/DmLxgIU.png"ROADMAP")
+![ROADMAP](https://i.imgur.com/QA0AGwS.png"ROADMAP")
