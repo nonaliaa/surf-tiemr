@@ -30,8 +30,6 @@ bool toggle_godmode[MAXPLAYERS + 1] = { true, ... };
 
 float g_fVelocity[3];
 
-
-
 // these are handles for our cookies, just think of these as the cookies themselves.
 Handle g_hToggle_Bhop_preference;
 Handle g_htoggle_speed_preference;
@@ -54,10 +52,14 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_speed", Command_Speed, "basic speed");
 	RegConsoleCmd("sm_bhop", Command_autobhop, "toggle bhopping");
 	RegConsoleCmd("sm_speedtype", Command_speedtype, "toggle speedtype");
-	RegConsoleCmd("sm_god", Command_God, "toggle godmode");
 	RegConsoleCmd("sm_saveloc", Command_saveloc, "a command that creates a \"saveloc\" or checkpoint the client can teleport to with sm_tele");
 	RegConsoleCmd("sm_tele", Command_tele, "a command to teleport to a \"saveloc\" or checkpoint the client has made.");
+	RegConsoleCmd("sm_teleprev", teleprev, "a command to teleport you to the previous saveloc.");
+	RegConsoleCmd("sm_telenext", telenext, "a command to teleport you to the next saveloc, if it exists.");
+	//RegConsoleCmd("sm_settele", settele, "a command to send you to any point in the array of savelocs. made for debugging. uncomment this at your own risk...");
 	
+	
+	//RegConsoleCmd("sm_settele", settele);
 	
 	HookEvent("player_spawn", Event_PlayerSpawn, EventHookMode_Post);
 	
@@ -77,11 +79,9 @@ public void OnPluginStart()
 
 public Action Event_PlayerSpawn(Event event, const char[] name, bool dontBroadcast) 
 {
-	for (int i = 1; i < MaxClients + 1; i++) {
-		switch (toggle_godmode[i]) {
-			case true:
-			SetEntProp(i, Prop_Data, "m_takedamage", 0, 1);
-		}
+	for (int i = 1; i < MaxClients + 1; i++) 
+	{
+		SetEntProp(i, Prop_Data, "m_takedamage", 0, 1);
 	}
 }
 
@@ -91,8 +91,8 @@ public void OnMapStart()
 	
 	CreateTimer(0.001, timer_getvel, _, TIMER_REPEAT);
 	
-	g_isaveloc_number = 0; // resets savelocs
-	
+	g_isaveloc_number = 0; // reset savelocs after map changes.
+	g_icreatedlist = 0;
 	
 }
 
@@ -138,20 +138,6 @@ public Action OnPlayerRunCmd(int client, int &buttons, int &inpulse, float[3] ve
 	}
 }
 
-
-public Action Command_God(int client, int args) 
-{
-	toggle_godmode[client] = !toggle_godmode[client];
-	PrintToChat(client, "godmode %s", toggle_godmode[client] ? "enabled":"disabled");
-	
-	switch (toggle_godmode[client] == true && IsPlayerAlive(client))
-	{
-		case true:
-		SetEntProp(client, Prop_Data, "m_takedamage", 0, 1);
-		case false:
-		SetEntProp(client, Prop_Data, "m_takedamage", 2, 1); // was hoping I could make it so the client is mortal immediately after they disable godmode but it didn't work.
-	}
-}
 
 
 public Action Command_Speed(int client, int args)
@@ -227,7 +213,6 @@ public Action timer_getvel(Handle timer)
 	}
 }
 
-
 public Action Command_menu(int client, int args) 
 {
 	g_menu.Display(client, MENU_TIME_FOREVER);
@@ -238,30 +223,22 @@ public Action Command_menu(int client, int args)
 // handler for menu "g_menu", this is where the code for it items is stored.
 public int Command_menu_handler(Menu menu, MenuAction action, int param1, int param2) 
 {
-	switch (action) {
+	switch (action) 
+	{
 		case MenuAction_Select:
 		{
 			switch (param2)
 			{
 				case 0:
 				{
-					toggle_godmode[param1] = !toggle_godmode[param1];
+					toggle_bhop[param1] = !toggle_bhop[param1];
 					
-					SetClientCookie(param1, g_hGodmode_preference, toggle_godmode[param1] ? "1":"0");
+					SetClientCookie(param1, g_hToggle_Bhop_preference, toggle_bhop[param1] ? "1":"0");
 					menu.DisplayAt(param1, menu.Selection, MENU_TIME_FOREVER);
 				}
 				
 				
 				case 1:
-				{
-					toggle_bhop[param1] = !toggle_bhop[param1];
-					
-					SetClientCookie(param1, g_hToggle_Bhop_preference, toggle_bhop[param1] ? "1":"0");
-					menu.DisplayAt(param1, menu.Selection, MENU_TIME_FOREVER);
-					
-					
-				}
-				case 2:
 				{
 					toggle_speed[param1] = !toggle_speed[param1];
 					
@@ -269,14 +246,16 @@ public int Command_menu_handler(Menu menu, MenuAction action, int param1, int pa
 					menu.DisplayAt(param1, menu.Selection, MENU_TIME_FOREVER);
 					
 					
-					
 				}
-				case 3:
+				case 2:
 				{
 					toggle_speedtype[param1] = !toggle_speedtype[param1];
 					
 					SetClientCookie(param1, g_hSpeedtype_preference, toggle_speedtype[param1] ? "1":"0");
 					menu.DisplayAt(param1, menu.Selection, MENU_TIME_FOREVER);
+					
+					
+					
 				}
 			}
 		}
@@ -290,20 +269,15 @@ public int Command_menu_handler(Menu menu, MenuAction action, int param1, int pa
 			{
 				case 0:
 				{
-					StrCat(display, sizeof(display), toggle_godmode[param1] ? " [enabled]" : " [disabled]");
+					StrCat(display, sizeof(display), toggle_bhop[param1] ? " [enabled]" : " [disabled]");
 					return RedrawMenuItem(display);
 				}
 				case 1:
 				{
-					StrCat(display, sizeof(display), toggle_bhop[param1] ? " [enabled]" : " [disabled]");
-					return RedrawMenuItem(display);
-				}
-				case 2:
-				{
 					StrCat(display, sizeof(display), toggle_speed[param1] ? " [enabled]" : " [disabled]");
 					return RedrawMenuItem(display);
 				}
-				case 3:
+				case 2:
 				{
 					StrCat(display, sizeof(display), toggle_speedtype[param1] ? " [xyz]" : " [xy]");
 					return RedrawMenuItem(display);
@@ -320,7 +294,6 @@ int CreateSettingsMenu()
 {
 	g_menu = new Menu(Command_menu_handler, MenuAction_DisplayItem);
 	g_menu.SetTitle("settings menu!");
-	g_menu.AddItem("", "god mode");
 	g_menu.AddItem("", "autobhop");
 	g_menu.AddItem("", "speedometer");
 	g_menu.AddItem("", "speed type");
