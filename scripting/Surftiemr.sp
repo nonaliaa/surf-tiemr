@@ -10,7 +10,7 @@
 #define PLUGIN_VERSION ""
 
 public Plugin myinfo = {
-	name = "(something) timer. (name pending)", 
+	name = "Surftiemr", 
 	author = "mnonolalia, roby", 
 	description = "work in progress surftimer.", 
 	version = PLUGIN_VERSION, 
@@ -220,7 +220,7 @@ public Action Command_menu(int client, int args)
 	return Plugin_Handled;
 }
 
-// handler for menu "g_menu", this is where the code for it items is stored.
+// handler for menu "g_menu", this is where the code for it's items is stored.
 public int Command_menu_handler(Menu menu, MenuAction action, int param1, int param2) 
 {
 	switch (action) 
