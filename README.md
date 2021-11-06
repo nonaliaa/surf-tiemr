@@ -2,4 +2,4 @@ Work in progress surf timer, Built from scratch with inspiration from ksf's time
 
 rough roadmap, subject to change:
 
-![ROADMAP](https://imgur.com/a/s1wNXwb "ROADMAP")
+![ROADMAP](https://i.imgur.com/DmLxgIU.png"ROADMAP")
