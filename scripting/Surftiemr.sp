@@ -3,6 +3,7 @@
 #include <sourcemod>
 #include <events>
 #include "surftiemr/saveloc.sp"
+#include "surftiemr/zones.sp"
 
 #pragma semicolon 1
 #pragma newdecls required
@@ -56,6 +57,8 @@ public void OnPluginStart()
 	RegConsoleCmd("sm_tele", Command_tele, "a command to teleport to a \"saveloc\" or checkpoint the client has made.");
 	RegConsoleCmd("sm_teleprev", teleprev, "a command to teleport you to the previous saveloc.");
 	RegConsoleCmd("sm_telenext", telenext, "a command to teleport you to the next saveloc, if it exists.");
+
+	RegConsoleCmd("sm_readfile", PostFileContent, "read the file and post content in chat");
 	//RegConsoleCmd("sm_settele", settele, "a command to send you to any point in the array of savelocs. made for debugging. uncomment this at your own risk...");
 	
 	
