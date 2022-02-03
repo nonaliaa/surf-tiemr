@@ -85,6 +85,7 @@ public Action Command_tele(int client, int args)
 			case 0:
 			{
 				TeleportEntity(client, g_forigin_library[g_irelevant_saveloc[client]], g_feyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
+				
 				return Plugin_Handled;	
 			}
 			case 1:
@@ -118,7 +119,7 @@ public Action Command_tele(int client, int args)
 public Action teleprev(int client, int args)
 {	
 	int prevtele;
-	if(g_isaveloc_number <- 1)
+	if (g_isaveloc_number <- 1)
 	{
 		PrintToChat(client, "you can't go to a tele that doesn't exist silly!");
 		return Plugin_Handled;
@@ -131,6 +132,7 @@ public Action teleprev(int client, int args)
 			prevtele = 0;
 			prevtele = g_ilast_created_saveloc[client][g_irelevant_saveloc[client] - 1];
 			g_irelevant_saveloc[client] = prevtele;
+
 			TeleportEntity(client, g_forigin_library[g_irelevant_saveloc[client]], g_feyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
 			PrintToChat(client, "teleported to saveloc #%d", g_irelevant_saveloc[client]);
 			return Plugin_Handled;
@@ -140,6 +142,7 @@ public Action teleprev(int client, int args)
 		{
 			prevtele = g_ilast_created_saveloc[client][g_irelevant_saveloc[client] - 1];
 			g_irelevant_saveloc[client] = prevtele;
+
 			TeleportEntity(client, g_forigin_library[g_irelevant_saveloc[client]], g_feyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
 			PrintToChat(client, "teleported to saveloc #%d",g_irelevant_saveloc[client]);
 			return Plugin_Handled;
@@ -168,8 +171,10 @@ public Action telenext(int client, int args)
 			nexttele = 0;
 			nexttele = g_ilast_created_saveloc[client][g_irelevant_saveloc[client] + 1];
 			g_irelevant_saveloc[client] = nexttele;
+
 			TeleportEntity(client, g_forigin_library[g_irelevant_saveloc[client]], g_feyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
 			PrintToChat(client, "teleported to saveloc %d", g_irelevant_saveloc[client]);
+
 			return Plugin_Handled;
 		}
 
@@ -177,8 +182,10 @@ public Action telenext(int client, int args)
 		{
 			nexttele = g_ilast_created_saveloc[client][g_irelevant_saveloc[client] + 1];
 			g_irelevant_saveloc[client] = nexttele;
+
 			TeleportEntity(client, g_forigin_library[g_irelevant_saveloc[client]], g_feyeAngle_library[g_irelevant_saveloc[client]], g_fvelocity_library[g_irelevant_saveloc[client]]);
 			PrintToChat(client, "teleported to saveloc %d",g_irelevant_saveloc[client]);
+			
 			return Plugin_Handled;
 		}
 	}
@@ -224,7 +231,7 @@ void removechar(char[] string, char removed)
 {
 	for (int i = 0; i <= strlen(string); i++)
 	{
-		if(string[i] == removed)
+		if (string[i] == removed)
 			string[i] = ' ';
 	}
 }	
